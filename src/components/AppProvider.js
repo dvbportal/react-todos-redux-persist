@@ -1,12 +1,20 @@
 import React from 'react'
-import { createStore, compose } from 'redux'
+import { applyMiddleware, createStore, compose } from 'redux'
 import { Provider } from 'react-redux'
 import App from './App'
 import reducer from '../reducers'
+import { createLogger } from 'redux-logger';
 
 import { persistStore, autoRehydrate } from 'redux-persist'
 
-const store = compose(autoRehydrate())(createStore)(reducer)
+const store = createStore(
+  reducer,
+  undefined,
+  compose(
+    applyMiddleware(createLogger({ collapsed: true })),
+    autoRehydrate(),
+  ),
+);
 
 export default class AppProvider extends React.Component {
 
